@@ -6,7 +6,7 @@ const PORT = 3001;
 app.get("/", (req,res) => {
     res.status(200).json({
         message:"Hello from the server side",
-    })
+    });
 });
 
 app.get("/users", async(req,res) =>  {
@@ -20,12 +20,17 @@ app.get("/users", async(req,res) =>  {
         else
             res.status(200).json({
                 message:"No users",
-            })
+            });
     }catch(err){
         res.status(500).json({
             message: `An error has occured ${err}`,
-        })
+        });
     }
 });
 
+app.get("/test", (res,req)=>{
+    res.status(200).json({
+        message: "Message: This is a test"
+    });
+})
 app.listen(PORT);
