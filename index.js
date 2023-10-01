@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
-const { fillDummyData, readData, getUsers } = require("./test");
-const PORT = 3001;
+require("dotenv").config();
+
+const { query } = require("./database/db");
+
+
+const PORT = process.env.PORT;
 
 app.get("/", (req,res) => {
     res.status(200).json({
@@ -11,26 +15,15 @@ app.get("/", (req,res) => {
 
 app.get("/users", async(req,res) =>  {
     try{
-        await fillDummyData();
-        const users = getUsers();
-        if(users && users.length>0)
-            res.status(200).json({
-                users,
-            });
-        else
-            res.status(200).json({
-                message:"No users",
-            });
+        const userSQL = `SELECT * FROM users`;
+        const users = await query(userSQL);
+        res.status(200).json({users});
     }catch(err){
-        res.status(500).json({
-            message: `An error has occured ${err}`,
-        });
+        res.status(500).json({message: "Internal server error"});
     }
 });
 
-app.get("/test", (res,req)=>{
-    res.status(200).json({
-        message: "Message: This is a test"
-    });
-})
+
+console.log(`App is running on port ${PORT}`)
+
 app.listen(PORT);
