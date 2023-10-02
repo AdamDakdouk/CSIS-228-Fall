@@ -2,28 +2,16 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 
-const { query } = require("./database/db");
-
-
 const PORT = process.env.PORT;
 
-app.get("/", (req,res) => {
-    res.status(200).json({
-        message:"Hello from the server side",
-    });
-});
+const { query } = require("./database/db");
 
-app.get("/users", async(req,res) =>  {
-    try{
-        const userSQL = `SELECT * FROM users`;
-        const users = await query(userSQL);
-        res.status(200).json({users});
-    }catch(err){
-        res.status(500).json({message: "Internal server error"});
-    }
-});
+const userRoute = require("./routes/user.routes");
+const testRoute = require("./routes/test.route")
 
-
-console.log(`App is running on port ${PORT}`)
+app.get("/api", testRoute);
+app.use("/api/users", userRoute);
 
 app.listen(PORT);
+
+console.log(`App is running on port ${PORT}`)
