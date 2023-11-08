@@ -9,6 +9,5 @@ const config = {
         connectionLimit: 10
     }
 }
-   
 
 module.exports = config;
